@@ -24,8 +24,73 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section data-markdown>
+					# What's new? ES6 features for Node v6.9.5
+				</section>
+				<section>
+					<h2>let & const</h2>
+					<section data-markdown>
+						What is hoisting?
+						```
+						x = 5; // assign 5 to x
+						var x; // declare x
+						console.log(x); => 5
+						```
+						Javascript hoists (&uarr;) function and variable declarations
+					</section>
+					<section data-markdown>
+						using let...
+						```
+						x = 5; // ReferenceError: x is not defined
+						let x;
+						console.log(x);
+						```
+					</section>
+					<section data-markdown>
+						another example using var
+						```
+						const functions = [];
+
+						for(var i = 0; i < 5; i++) {
+							functions.push(() => i);
+						}
+
+						console.log(functions[3]()); => 5
+						```
+					</section>
+					<section data-markdown>
+						instead use let
+						```
+						const functions = [];
+
+						for(let i = 0; i < 5; i++) {
+							functions.push(() => i);
+						}
+
+						console.log(functions[3]()); => 3
+						```
+					</section>
+					<section data-markdown>
+						const
+						```
+						const a = 1;
+						a = 2; // ​​TypeError: Assignment to constant variable
+						```
+						```
+						const a = {};
+						a.b = 2;
+						console.log(a); // { b: 2 }
+						```
+						```
+						const a = [1];
+						a[0] = 2;
+						console.log(a); // [2]
+						```
+					</section>
+				</section>
+				<section dta-markdown>
+					
+				</section>
 			</div>
 		</div>
 
