@@ -28,7 +28,10 @@
 					# What's new? ES6 features for Node v6.9.5
 				</section>
 				<section>
-					<h2>let & const</h2>
+					<section data-markdown>
+						## let & const
+						(from Node v4)
+					</section>
 					<section data-markdown>
 						What is hoisting?
 						```
@@ -88,9 +91,145 @@
 						```
 					</section>
 				</section>
-				<section dta-markdown>
-					
+				<section>
+					<section data-markdown>
+						## arrow functions
+						(from Node v4)
+					</section>
+					<section data-markdown>
+						```
+						function sum(a, b) {
+							return a + b;
+						}
+
+						// using arrow fn
+						const sum = (a, b) => {
+							return a + b;
+						};
+
+						// composing functions
+						const sum2 = (a) => (b) => {return a+b;}
+						console.log(sum2(1)(2));	// => 3
+						```
+					</section>
 				</section>
+				<section>
+					<section data-markdown>
+						## default parameters
+						(from Node v6.0.0)
+					</section>
+					<section data-markdown>
+						route_definitions.js
+
+						```
+						function getIncompleteTrip(schedule, options, stations, 
+							trip, dontApplyCutoff) {
+							// ...
+							if (!dontApplyCutoff) {
+								hhMM = cutOffService.isAfterCutOff(schedule, options);
+							}
+						
+						// client code:
+						getIncompleteTrip(schedule, data, stations, trip, false);
+						```
+					</section>
+					<section data-markdown>
+						route_definitions.js
+
+						```
+						// refactoring :D
+						function getIncompleteTrip(schedule, data, stations, 
+							trip, applyCutoff = false) {
+							// ...
+							if (applyCutoff) {
+								hhMM = cutOffService.isAfterCutOff(schedule, data);
+							}
+						
+						// client code:
+						getIncompleteTrip(schedule, data, stations, trip);
+						```
+					</section>
+				</section>
+				<section>
+					<section data-markdown>
+						## destructuring
+						(from Node v6.0.0)
+					</section>
+					<section data-markdown>
+						pattern matching
+						```
+						let [a, , b] = [1,2,3];
+						// a = 1
+						// b = 3
+						const user = {name: "Jim", lastname: "Morrison", age: 27};
+						const {name} = user;
+						// name = "Jim"
+						```
+						fail-soft
+						```
+						let [a] = [];
+						// a = undefined
+						```
+					</section>
+					<section data-markdown>
+						route_definitions.js
+
+						```
+						// refactoring :D
+						function getIncompleteTrip(schedule, data, stations, 
+							trip, {applyCutoff = false} = {}) {
+							// ...
+							if (applyCutoff) {
+								hhMM = cutOffService.isAfterCutOff(schedule, data);
+							}
+						
+						// client code:
+						getIncompleteTrip(schedule, data, stations, trip, 
+							{applyCutoff: true});
+						```
+					</section>
+				</section>
+				<section>
+					<section data-markdown>
+						## rest & spread
+						(from Node v6.0.0)
+					</section>
+					<section data-markdown>
+						### rest
+						```
+						function f(x, ...y) {
+							// y is an Array
+							return x * y.length;
+						}
+						f(3, "hello", true); // => 6
+						```
+
+						### spread
+						```
+						function f(x, y, z) {
+							return x + y + z;
+						}
+						// Pass each elem of array as argument
+						f(...[1,2,3]); // => 6
+						```
+					</section>
+					<section data-markdown>
+						the betterez-app async helper is an example using the rest and spread operators
+						```
+						function expectAsync(done, expectedFn) {
+							return function(...args) {	// rest
+								try {
+									expectedFn(...args);  // spread
+									done();
+								} catch (err) {
+									done(err);
+								}
+							};
+						}
+						```
+					</section>
+				</section>
+				
 			</div>
 		</div>
 
