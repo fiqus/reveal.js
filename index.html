@@ -12,6 +12,16 @@
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
 
+		<style>
+			.reveal pre {
+				width: 100%;
+			}
+
+			.reveal pre code {
+				max-height: 420px;
+			}	
+		</style>
+
 		<!-- Printing and PDF exports -->
 		<script>
 			var link = document.createElement( 'link' );
@@ -110,6 +120,44 @@
 						// composing functions
 						const sum2 = (a) => (b) => {return a+b;}
 						console.log(sum2(1)(2));	// => 3
+						```
+					</section>
+					<section data-markdown>
+						models/accounts.js
+
+						```
+
+function getFixedCurrenciesArray(currencies, masterCurrencies){
+	var result =[];
+	for (var i = 0; i < currencies.length; i++){
+		var currency = currencies[i];
+		var masterCurrency = _.find(masterCurrencies, function(mc) {
+			return mc.isocode === currency;
+		});
+		if (masterCurrency){
+			result.push(masterCurrency);
+		}
+	}
+	
+	return result;
+}
+						```
+					</section>
+					<section data-markdown>
+						models/accounts.js
+
+						```
+// refactored using arrow functions
+
+function getFixedCurrenciesArray(currencies, masterCurrencies) {
+	// super simple to define curryfied functions
+	// to improve our code :D
+	const sameIsoCode = (mc) => (c) => c === mc.isocode;
+	
+	return masterCurrencies.filter((mc) => {
+		return currencies.find(sameIsoCode(mc));
+	});
+}
 						```
 					</section>
 				</section>
@@ -312,6 +360,7 @@
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
 			});
+
 		</script>
 	</body>
 </html>
