@@ -229,7 +229,70 @@
 						```
 					</section>
 				</section>
-				
+				<section data-markdown>
+					## What's comming up for us?
+				</section>
+				<section>
+					<section data-markdown>
+					## async functions
+					(from Node v7.6.0)
+					</section>
+					<section data-markdown>
+						### async/await
+						* A new way to write asynchronous code
+						* It's actually built on top of promises
+						* Like promises, non blocking
+						* Makes asynchronous code look and behave a little more like synchronous code
+					</section>
+					<section data-markdown>
+						Using promises (connex-trips-data-service.js from btrz-api-inventory)
+						```
+						filterTripData(trips, options, _currentDate_) {
+							// ...
+							return this.searchFilters.filterOffByDate(trips, options, _currentDate_)
+								.then((result) => {
+									return this.searchFilters.filterOffByCapacity(result, options);
+								})
+								.then((result) => {
+									return this.searchFilters.filterOffByHoliday(result, options.dateConfiguration);
+								})
+								.then((result) => {
+									return this.setTripsPrice(options.accountId, options.productId, result);
+								})
+								.then((result) => {
+									if (options.pricingType === "distance") {
+									return this.distanceBucketsDataService.get({accountId: options.accountId, productIds: {$in: [options.productId]} })
+										.then((distanceBuckets) => {
+										return this.searchFilters.filterOffByDistance(result, distanceBuckets);
+										});
+									}
+									return result;
+								})
+								.then((result) => {
+									return SearchFilters.cleanTrips(result);
+								});
+						}
+						```
+					</section>
+					<section data-markdown>
+						Refactoring async/await
+						```
+						async filterTripData(trips, options, _currentDate_) {
+							// ...
+							let result = await this.searchFilters.filterOffByDate(trips, options, _currentDate_);
+							result = await this.searchFilters.filterOffByCapacity(result, options);
+							result = await this.searchFilters.filterOffByHoliday(result, options.dateConfiguration);
+							result = await this.setTripsPrice(options.accountId, options.productId, result);
+							if (options.pricingType === "distance") {
+								const distanceBuckets = await this.distanceBucketsDataService.get({accountId: options.accountId, productIds: {$in: [options.productId]} });
+								result = this.searchFilters.filterOffByDistance(result, distanceBuckets);
+							}
+							return SearchFilters.cleanTrips(result);
+						}
+						```
+					</section>
+				</section>
+					
 			</div>
 		</div>
 
